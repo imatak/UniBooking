@@ -3,5 +3,7 @@
     <string name="app_name">UniBooking</string>
     <string name="FACEBOOK_APP_ID">441248416519943</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">cfb55368536a6218c7943d901aac42dc</string>
+    <string name="open_nav_drawer">Open navigation drawer</string>
+    <string name="close_nav_drawer">Close navigation drawer</string>
 
 </resources>
