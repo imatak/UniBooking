@@ -67,6 +67,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 break;
 
         }
+
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
