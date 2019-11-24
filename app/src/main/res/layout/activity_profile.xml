@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ProfileActivity"
-    tools:openDrawer="start">
+    tools:context=".ProfileActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,10 +22,63 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp"/>
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/Fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></FrameLayout>
+            android:layout_height="match_parent">
+
+            <CalendarView
+                android:id="@+id/kalendarRezervacije"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/razlogtxt"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/kalendarRezervacije"
+                android:gravity="center"
+                android:text="Razlog: " />
+
+            <Spinner
+                android:id="@+id/razlogSpinner"
+                android:layout_width="300dp"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@id/razlogtxt"
+                android:layout_below="@+id/kalendarRezervacije"/>
+
+            <TextView
+                android:id="@+id/userEmailSpremi"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/razlogSpinner"
+                android:layout_centerVertical="true"
+                android:gravity="center"/>
+
+            <EditText
+                android:id="@+id/userText"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/userEmailSpremi"
+                android:layout_centerVertical="true"
+                android:hint="Neki tekst za spremiti"
+                android:inputType="text"
+                android:gravity="center"/>
+
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/userText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="#008AFF"
+                android:text="Spremi"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
 
     </LinearLayout>
