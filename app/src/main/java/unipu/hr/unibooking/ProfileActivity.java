@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +39,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private DrawerLayout drawer;
 
     CalendarView kalendar;
+    Spinner termin;
     Spinner razlog;
     TextView userEmailSpremi;
     EditText userText;
     Button Spremi;
+    Toolbar toolbar;
+    ProgressBar progressBar;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -53,28 +57,49 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         kalendar = findViewById(R.id.kalendarRezervacije);
+        termin = findViewById(R.id.terminSpinner);
         razlog = findViewById(R.id.razlogSpinner);
         userEmailSpremi = findViewById(R.id.userEmailSpremi);
         userText = findViewById(R.id.userText);
+        progressBar = findViewById(R.id.progressBar_user);
         Spremi = findViewById(R.id.btnSave);
+
+
+        List<String> categoriesTermin = new ArrayList<String>();
+        categoriesTermin.add("12:00");
+        categoriesTermin.add("12:10");
+        categoriesTermin.add("12:20");
+        categoriesTermin.add("12:30");
+        categoriesTermin.add("12:40");
+        categoriesTermin.add("12:50");
+        categoriesTermin.add("13:10");
+        categoriesTermin.add("13:20");
+        categoriesTermin.add("13:30");
+        categoriesTermin.add("13:40");
+        categoriesTermin.add("13:50");
 
 
         List<String> categories = new ArrayList<String>();
         categories.add("Ispis kolegija");
         categories.add("Upis na studij");
+        categories.add("Ispis potvrde");
+        categories.add("Prebacivanje studija");
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapterTermin = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoriesTermin);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         razlog.setAdapter(dataAdapter);
+        termin.setAdapter(dataAdapterTermin);
 
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -82,6 +107,20 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 // your code here
                 // On selecting a spinner item
                  rezervacija.setRazlog(parentView.getItemAtPosition(position).toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+
+        termin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                // On selecting a spinner item
+                rezervacija.setTermin(parentView.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -98,6 +137,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
         Spremi.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
+                progressBar.setVisibility(View.VISIBLE);
+                Spremi.setClickable(false);
                 //int a = Integer.parseInt(datum.getTex...)
                 // rezervacija.setDatum(a);
                 Calendar cl = Calendar.getInstance();
@@ -107,8 +148,12 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
                 rezervacija.setDatum(date);
                 rezervacija.setEmailUsera(userEmailSpremi.getText().toString().trim());
-                rezervacija.setUserTekst(userText.getText().toString().trim());
+                //rezervacija.setUserTekst(userText.getText().toString().trim());
                 reff.push().setValue(rezervacija);
+                progressBar.setVisibility(View.INVISIBLE);
+                Spremi.setClickable(true);
+                Toast.makeText(ProfileActivity.this, "Termin je uspješno rezerviran!"
+                        , Toast.LENGTH_LONG).show();
             }
         });
 

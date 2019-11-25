@@ -27,26 +27,63 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Toolbar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/toolbar_user"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="525dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+                <ProgressBar
+                    android:id="@+id/progressBar_user"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
+
+            </Toolbar>
+
             <CalendarView
                 android:id="@+id/kalendarRezervacije"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:layout_margin="10dp"/>
 
             <TextView
-                android:id="@+id/razlogtxt"
-                android:layout_width="50dp"
+                android:id="@+id/terminTxt"
+                android:layout_width="60dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/kalendarRezervacije"
                 android:gravity="center"
-                android:text="Razlog: " />
+                android:text="Termin: "
+                android:paddingLeft="10dp"/>
+
+            <Spinner
+                android:id="@+id/terminSpinner"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_toRightOf="@id/terminTxt"
+                android:layout_below="@+id/kalendarRezervacije"/>
+
+            <TextView
+                android:id="@+id/razlogTxt"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/terminTxt"
+                android:gravity="center"
+                android:text="Razlog: "
+                android:paddingLeft="10dp"/>
 
             <Spinner
                 android:id="@+id/razlogSpinner"
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="40dp"
-                android:layout_toRightOf="@id/razlogtxt"
-                android:layout_below="@+id/kalendarRezervacije"/>
+                android:layout_toRightOf="@id/razlogTxt"
+                android:layout_below="@+id/terminSpinner"/>
 
             <TextView
                 android:id="@+id/userEmailSpremi"
@@ -54,7 +91,8 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/razlogSpinner"
                 android:layout_centerVertical="true"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/userText"
@@ -62,9 +100,10 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/userEmailSpremi"
                 android:layout_centerVertical="true"
-                android:hint="Neki tekst za spremiti"
+                android:hint="Neki drugi razlog"
                 android:inputType="text"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:visibility="invisible"/>
 
 
             <Button

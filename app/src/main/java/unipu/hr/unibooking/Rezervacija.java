@@ -5,6 +5,7 @@ public class Rezervacija {
     private String UserTekst;
     private String Datum;
     private String Razlog;
+    private String Termin;
 
     public Rezervacija() {
     }
@@ -39,5 +40,13 @@ public class Rezervacija {
 
     public void setRazlog(String razlog) {
         Razlog = razlog;
+    }
+
+    public String getTermin() {
+        return Termin;
+    }
+
+    public void setTermin(String termin) {
+        Termin = termin;
     }
 }
