@@ -10,10 +10,7 @@ import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import android.content.ClipData;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -195,7 +192,7 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
                 startActivity(intent);
                 break;
             case R.id.mojerezervacije:
-                intent = new Intent(RezervirajActivity.this, MojeRezervacijeActiviy.class);
+                intent = new Intent(RezervirajActivity.this, MojeRezervacijeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rezerviraj:

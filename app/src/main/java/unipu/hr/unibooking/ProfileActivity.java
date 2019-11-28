@@ -7,33 +7,21 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -67,8 +55,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
 
 
-
-
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView =findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -86,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                 startActivity(intent);
                 break;
             case R.id.mojerezervacije:
-                intent = new Intent(ProfileActivity.this, MojeRezervacijeActiviy.class);
+                intent = new Intent(ProfileActivity.this, MojeRezervacijeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rezerviraj:

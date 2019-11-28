@@ -42,7 +42,7 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                 startActivity(intent);
                 break;
             case R.id.mojerezervacije:
-                intent = new Intent(ProsleRezervacijeActivity.this, MojeRezervacijeActiviy.class);
+                intent = new Intent(ProsleRezervacijeActivity.this, MojeRezervacijeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rezerviraj:
