@@ -10,12 +10,30 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class ProsleRezervacijeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+
+    FirebaseAuth firebaseAuth;
+    FirebaseUser firebaseUser;
+    DatabaseReference reff;
+    Rezervacija rezervacija;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +43,11 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
         Toolbar toolbar = findViewById(R.id.toolbar3);
         setSupportActionBar(toolbar);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        rezervacija = new Rezervacija();
+        reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
+
         drawer = findViewById(R.id.drawer_layoutProsleRezervacije);
         NavigationView navigationView =findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -32,6 +55,66 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+
+        ListView mListView = (ListView)findViewById(R.id.listViewProsleRezervacije);
+        List<Date> dates = new ArrayList<Date>();
+        ArrayList<MojeRezervacijeStudent> ListaMojihRezervacija = new ArrayList<>();
+        MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
+        mListView.setAdapter(adapter);
+
+        FirebaseDatabase.getInstance().getReference().child("Rezervacije")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Rezervacija a = snapshot.getValue(Rezervacija.class);
+
+
+                            if (a.getEmailUsera().equals(firebaseUser.getEmail())) {
+
+                                String NDatum = new String();
+                                String NRazlog = new String();
+                                String NStatus = new String();
+                                String NTermin = new String();
+
+                                NDatum = a.getDatum();
+                                NRazlog = a.getRazlog();
+                                NTermin = a.getTermin();
+                                NStatus = "Proslo";
+
+
+                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+                                Date now = new Date(System.currentTimeMillis());
+
+                                try {
+                                    Date d=dateFormat.parse(NDatum);
+                                    if (d.compareTo(now) < 0) {
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog));
+                                    }
+
+                                }
+                                catch(Exception e) {
+                                    //java.text.ParseException: Unparseable date: Geting error
+                                    System.out.println("Excep"+e);
+                                }
+
+                            }
+
+                            //User user = snapshot.getValue(User.class);
+                            //System.out.println(user.email);
+                        }
+
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
     }
 
 
