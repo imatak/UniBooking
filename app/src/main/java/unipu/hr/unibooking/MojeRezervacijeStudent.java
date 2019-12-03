@@ -1,6 +1,8 @@
 package unipu.hr.unibooking;
 
-public class MojeRezervacijeStudent {
+import java.io.Serializable;
+
+public class MojeRezervacijeStudent implements Serializable {
     private String Datum;
     private String Vrijeme;
     private String Status;

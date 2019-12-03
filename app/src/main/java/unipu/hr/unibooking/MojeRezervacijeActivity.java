@@ -15,6 +15,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.provider.ContactsContract;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -128,13 +130,20 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                MojeRezervacijeStudent value = (MojeRezervacijeStudent) adapter.getItem(i);
+                //value.getDatum();
+                Intent intent = new Intent(MojeRezervacijeActivity.this, EditRezervacijaActivity.class);
+                intent.putExtra("Uredi",value);
+                startActivity(intent);
+            }
+        });
+
+
     }
-
-
-
-
-
-
 
 
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
