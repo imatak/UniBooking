@@ -32,8 +32,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jaeger.library.StatusBarUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class MojeRezervacijeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -116,7 +118,22 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                                 NTermin = a.getTermin();
                                 NStatus = "Odobreno";
 
-                                ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog));
+                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+                                Date now = new Date(System.currentTimeMillis());
+
+                                try {
+                                    Date d=dateFormat.parse(NDatum);
+                                    if (d.compareTo(now) >= 0) {
+
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog));
+                                    }
+
+                                }
+                                catch(Exception e) {
+                                    //java.text.ParseException: Unparseable date: Geting error
+                                    System.out.println("Excep"+e);
+                                }
+
                                 adapter.notifyDataSetChanged();
                             }
 

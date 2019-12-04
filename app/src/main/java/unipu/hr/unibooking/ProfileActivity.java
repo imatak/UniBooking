@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -34,7 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
     private DrawerLayout drawer;
 
     CalendarView kalendar;
@@ -51,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     DatabaseReference reff;
     Rezervacija rezervacija;
 
+    private Button buttonRezerviraj;
+    private Button buttonMojeRezervacije;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         setContentView(R.layout.activity_profile);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        buttonRezerviraj =findViewById(R.id.buttonRezerviraj);
+        buttonRezerviraj.setOnClickListener(this);
+        buttonMojeRezervacije =findViewById(R.id.buttonMojeRezervacije);
+        buttonMojeRezervacije.setOnClickListener(this);
 
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -173,6 +181,22 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                     public void onCancelled(DatabaseError databaseError) {
                     }
                 });
+    }
+
+
+    @Override
+    public void onClick(View view)
+    {
+        switch (view.getId()) {
+            case R.id.buttonRezerviraj:
+                Intent intent = new Intent(ProfileActivity.this, RezervirajActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.buttonMojeRezervacije:
+                intent = new Intent(ProfileActivity.this, MojeRezervacijeActivity.class);
+                startActivity(intent);
+                break;
+        }
     }
 
     @Override

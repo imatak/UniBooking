@@ -71,6 +71,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="439dp"/>
+
+            <Button
+                android:id="@+id/buttonRezerviraj"
+                android:layout_width="153dp"
+                android:layout_height="72dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="140dp"
+                android:layout_marginBottom="260dp"
+                android:text="Rezerviraj" />
+
+            <Button
+                android:id="@+id/buttonMojeRezervacije"
+                android:layout_width="153dp"
+                android:layout_height="72dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="140dp"
+                android:layout_marginBottom="143dp"
+                android:text="MojeRezervacije" />
+
         </RelativeLayout>
 
 
