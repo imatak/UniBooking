@@ -85,6 +85,7 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                                 NRazlog = a.getRazlog();
                                 NTermin = a.getTermin();
                                 NStatus = "Proslo";
+                                NID = a.getID();
 
 
                                 SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");

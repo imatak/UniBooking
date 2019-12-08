@@ -81,12 +81,14 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
                                 String NEmail = new String();
                                 String NRazlog = new String();
                                 String NStatus = new String();
+                                String NID = new String();
 
                                 NVrijeme = a.getTermin();
                                 NEmail = a.getEmailUsera();
                                 NRazlog = a.getRazlog();
                                 NDatum = a.getDatum();
                                 NStatus = "Odobreno";
+                                NID = a.getID();
 
                                 SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
                                 Date now = new Date(System.currentTimeMillis());
@@ -95,7 +97,7 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.compareTo(now) >= 0) {
 
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NVrijeme, NEmail, NRazlog, NStatus));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NVrijeme, NEmail, NRazlog, NStatus, NID));
                                     }
 
                                 }
