@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditRezervacijaActivity"></activity>
+        <activity android:name=".RadnikPretrazivanjeActivity"></activity>
+        <activity android:name=".RadnikPregledRezervacijaActivity" />
+        <activity android:name=".RadnikDashboardActivity" />
+        <activity android:name=".EditRezervacijaActivity" />
         <activity android:name=".MojeRezervacijeActivity" />
         <activity android:name=".ProsleRezervacijeActivity" />
         <activity android:name=".RezervirajActivity" />

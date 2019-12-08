@@ -78,12 +78,15 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         NavigationView navigationView =findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //za navbar otvaranje zatvaranje
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        //za ispis liste
         ListView mListView = (ListView)findViewById(R.id.listViewDashboard);
-        List<Date> dates = new ArrayList<Date>();
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+        Date now = new Date(System.currentTimeMillis());
         ArrayList<MojeRezervacijeStudent> ListaMojihRezervacija = new ArrayList<>();
         MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
         mListView.setAdapter(adapter);
@@ -98,7 +101,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                         c1.set(Calendar.MONTH, 11);
                         c1.set(Calendar.DATE, 05);
                         c1.set(Calendar.YEAR, 2070);
-                        Date dateOne = c1.getTime();
 
                         MojeRezervacijeStudent mrs1 = new MojeRezervacijeStudent("","","","");
                         MojeRezervacijeStudent mrs2 = new MojeRezervacijeStudent("","","","");
@@ -113,19 +115,12 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
                             if (a.getEmailUsera().equals(firebaseUser.getEmail())) {
 
-                                String NDatum = new String();
-                                String NRazlog = new String();
-                                String NStatus = new String();
-                                String NTermin = new String();
 
-                                NDatum = a.getDatum();
-                                NRazlog = a.getRazlog();
-                                NTermin = a.getTermin();
-                                NStatus = "Odobreno";
+                                String NDatum = a.getDatum();
+                                String NRazlog = a.getRazlog();
+                                String NTermin = a.getTermin();
+                                String NStatus = "Odobreno";
 
-
-                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
-                                Date now = new Date(System.currentTimeMillis());
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
