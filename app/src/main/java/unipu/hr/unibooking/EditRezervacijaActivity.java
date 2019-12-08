@@ -67,6 +67,7 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
 
         Intent i = getIntent();
         MojeRezervacijeStudent value = (MojeRezervacijeStudent) i.getSerializableExtra("Uredi");
+        String ID_rezervacije = value.getID();
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
@@ -79,6 +80,11 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
         progressBar = findViewById(R.id.progressBar_userR);
         Spremi = findViewById(R.id.btnSaveR);
         izbrisi = findViewById(R.id.btnDeleteR);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        rezervacija = new Rezervacija();
+        reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
 
         List<String> categoriesTermin = new ArrayList<String>();
         categoriesTermin.add("12:00");
@@ -114,9 +120,11 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
 
         int spinnerPositionRazlog = dataAdapter.getPosition(value.getRazlog());
         razlog.setSelection(spinnerPositionRazlog);
+        //rezervacija.setRazlog(value.getRazlog());
         int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getVrijeme());
         termin.setSelection(spinnerPositionTermin);
         SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy.");
+        //rezervacija.setTermin(value.getVrijeme());
         Date date1 = new Date();
         try {
             date1=formatter1.parse(value.getDatum());
@@ -124,6 +132,7 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
             e.printStackTrace();
         }
         kalendar.setDate(date1.getTime());
+        rezervacija.setDatum(value.getDatum());
 
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -163,15 +172,11 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
                 String m = String.valueOf(month+1);
                 String y = String.valueOf(year);
                 curDate ="" + d + "." + m + "." + y + ".";
+                rezervacija.setDatum(curDate);
                 //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
             }
         });
 
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        rezervacija = new Rezervacija();
-        reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
 
         Spremi.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
@@ -184,17 +189,18 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
                                     Rezervacija a = snapshot.getValue(Rezervacija.class);
 
 
-                                    if (a.getEmailUsera().equals(firebaseUser.getEmail()) &&
-                                            a.getDatum().equals(value.getDatum()) &&
-                                            a.getRazlog().equals(value.getRazlog()) &&
-                                            a.getTermin().equals(value.getVrijeme()) ) {
+                                    if (a.getID().equals(ID_rezervacije)) {
 
-                                        String key = snapshot.getKey();
-                                        rezervacija.setDatum(curDate);
+                                        //String key = snapshot.getKey();
+                                        //rezervacija.setDatum(curDate);
                                         rezervacija.setEmailUsera(userEmailSpremi.getText().toString().trim());
-                                        reff.child(key).child("datum").setValue(rezervacija.getDatum());
-                                        reff.child(key).child("razlog").setValue(rezervacija.getRazlog());
-                                        reff.child(key).child("termin").setValue(rezervacija.getTermin());
+                                        String x = rezervacija.getDatum();
+                                        if(x != null && !x.isEmpty()){
+                                            reff.child(a.getID()).child("datum").setValue(rezervacija.getDatum());
+                                        }
+
+                                        reff.child(a.getID()).child("razlog").setValue(rezervacija.getRazlog());
+                                        reff.child(a.getID()).child("termin").setValue(rezervacija.getTermin());
                                     }
                                 }
 
@@ -223,13 +229,10 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
                                     Rezervacija a = snapshot.getValue(Rezervacija.class);
 
 
-                                    if (a.getEmailUsera().equals(firebaseUser.getEmail()) &&
-                                            a.getDatum().equals(value.getDatum()) &&
-                                            a.getRazlog().equals(value.getRazlog()) &&
-                                            a.getTermin().equals(value.getVrijeme()) ) {
+                                    if (a.getID().equals(value.getID())) {
 
-                                        String key = snapshot.getKey();
-                                        reff.child(key).removeValue();
+                                        //String key = snapshot.getKey();
+                                        reff.child(a.getID()).removeValue();
                                     }
                                 }
 

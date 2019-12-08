@@ -69,6 +69,11 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         progressBar = findViewById(R.id.progressBar_userR);
         Spremi = findViewById(R.id.btnSaveR);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        rezervacija = new Rezervacija();
+        reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
+
 
         List<String> categoriesTermin = new ArrayList<String>();
         categoriesTermin.add("12:00");
@@ -146,11 +151,6 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         });
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        rezervacija = new Rezervacija();
-        reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
-
         Spremi.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -165,7 +165,10 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
                 rezervacija.setDatum(curDate);
                 rezervacija.setEmailUsera(userEmailSpremi.getText().toString().trim());
                 //rezervacija.setUserTekst(userText.getText().toString().trim());
-                reff.push().setValue(rezervacija);
+                String key = reff.push().getKey();
+                rezervacija.setID(key);
+                reff.child(key).setValue(rezervacija);
+                //reff.push().setValue(rezervacija);
                 progressBar.setVisibility(View.INVISIBLE);
                 Spremi.setClickable(true);
                 Toast.makeText(RezervirajActivity.this, "Termin je uspješno rezerviran!"

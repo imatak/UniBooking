@@ -6,6 +6,7 @@ public class Rezervacija {
     private String Datum;
     private String Razlog;
     private String Termin;
+    private String ID;
 
     public Rezervacija() {
     }
@@ -49,4 +50,8 @@ public class Rezervacija {
     public void setTermin(String termin) {
         Termin = termin;
     }
+
+    public String getID() { return ID; }
+
+    public void setID(String ID) { this.ID = ID; }
 }

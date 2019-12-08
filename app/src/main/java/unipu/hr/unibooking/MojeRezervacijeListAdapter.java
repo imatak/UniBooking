@@ -41,8 +41,9 @@ public class MojeRezervacijeListAdapter extends ArrayAdapter<MojeRezervacijeStud
          String vrijeme = getItem(position).getVrijeme();
          String status = getItem(position).getStatus();
          String razlog = getItem(position).getRazlog();
+         String id = getItem(position).getID();
 
-         MojeRezervacijeStudent rezervacijeStud = new MojeRezervacijeStudent(datum,vrijeme,status,razlog);
+         MojeRezervacijeStudent rezervacijeStud = new MojeRezervacijeStudent(datum,vrijeme,status,razlog,id);
 
         LayoutInflater inflater= LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);

@@ -79,6 +79,7 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                                 String NRazlog = new String();
                                 String NStatus = new String();
                                 String NTermin = new String();
+                                String NID = new String();
 
                                 NDatum = a.getDatum();
                                 NRazlog = a.getRazlog();
@@ -92,7 +93,7 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                                 try {
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.compareTo(now) < 0) {
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
                                     }
 
                                 }

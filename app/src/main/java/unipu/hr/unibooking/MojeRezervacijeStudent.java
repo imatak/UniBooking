@@ -7,12 +7,14 @@ public class MojeRezervacijeStudent implements Serializable {
     private String Vrijeme;
     private String Status;
     private String Razlog;
+    private String ID;
 
-    public MojeRezervacijeStudent(String datum, String vrijeme, String status, String razlog) {
+    public MojeRezervacijeStudent(String datum, String vrijeme, String status, String razlog, String ID) {
         this.Datum = datum;
         this.Vrijeme = vrijeme;
         this.Status = status;
-        Razlog = razlog;
+        this.Razlog = razlog;
+        this.ID = ID;
     }
 
     public String getDatum() {
@@ -44,6 +46,14 @@ public class MojeRezervacijeStudent implements Serializable {
     }
 
     public void setRazlog(String razlog) {
-        Razlog = razlog;
+        this.Razlog = razlog;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 }

@@ -112,11 +112,13 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                                 String NRazlog = new String();
                                 String NStatus = new String();
                                 String NTermin = new String();
+                                String NID = new String();
 
                                 NDatum = a.getDatum();
                                 NRazlog = a.getRazlog();
                                 NTermin = a.getTermin();
                                 NStatus = "Odobreno";
+                                NID = a.getID();
 
                                 SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
                                 Date now = new Date(System.currentTimeMillis());
@@ -125,7 +127,7 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.compareTo(now) >= 0) {
 
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
                                     }
 
                                 }
