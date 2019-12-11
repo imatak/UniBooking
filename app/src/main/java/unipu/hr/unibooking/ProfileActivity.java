@@ -86,28 +86,32 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         //za ispis liste
         ListView mListView = (ListView)findViewById(R.id.listViewDashboard);
         SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
-        Date now = new Date(System.currentTimeMillis());
         ArrayList<MojeRezervacijeStudent> ListaMojihRezervacija = new ArrayList<>();
         MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
         mListView.setAdapter(adapter);
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, -1);
+        c.set(Calendar.MINUTE, -1);
+        c.set(Calendar.SECOND, -1);
+        c.set(Calendar.MILLISECOND, -1);
+        Date now = c.getTime();
 
         FirebaseDatabase.getInstance().getReference().child("Rezervacije")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-
-                        Calendar c1 = Calendar.getInstance();
-                        c1.set(Calendar.MONTH, 11);
-                        c1.set(Calendar.DATE, 05);
-                        c1.set(Calendar.YEAR, 2070);
+                        c.set(Calendar.MONTH, 11);
+                        c.set(Calendar.DATE, 05);
+                        c.set(Calendar.YEAR, 2070);
+                        Date d1 = c.getTime();
+                        Date d2 = c.getTime();
+                        Date d3 = c.getTime();
 
                         MojeRezervacijeStudent mrs1 = new MojeRezervacijeStudent("","","","", "");
                         MojeRezervacijeStudent mrs2 = new MojeRezervacijeStudent("","","","", "");
                         MojeRezervacijeStudent mrs3 = new MojeRezervacijeStudent("","","","", "");
-                        Date d1 = c1.getTime();
-                        Date d2 = c1.getTime();
-                        Date d3 = c1.getTime();
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Rezervacija a = snapshot.getValue(Rezervacija.class);
@@ -125,8 +129,8 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
-                                    if (d.compareTo(now) >= 0) {
-                                        if (d.compareTo(d1) < 0) {
+                                    if (d.after(now)) {
+                                        if (d.before(d1)) {
                                             d3=d2;
                                             d2=d1;
                                             d1=d;
@@ -134,13 +138,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                                             mrs2=mrs1;
                                             mrs1 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
 
-                                        } else if (d.compareTo(d2) < 0) {
+                                        } else if (d.before(d2)) {
                                             d3 = d2;
                                             d2 = d;
                                             mrs3 = mrs2;
                                             mrs2 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
 
-                                        } else if (d.compareTo(d3) < 0) {
+                                        } else if (d.before(d3)) {
                                             d3=d;
                                             mrs3 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
 

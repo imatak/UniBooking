@@ -35,6 +35,7 @@ import com.jaeger.library.StatusBarUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 
 public class MojeRezervacijeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,6 +96,15 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
 
         MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
         mListView.setAdapter(adapter);
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        Date now = c.getTime();
 
 
         // petlja za pretraživanje rezervacija za trenutno prijavljenog korisnika
@@ -108,25 +118,17 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
 
                             if (a.getEmailUsera().equals(firebaseUser.getEmail())) {
 
-                                String NDatum = new String();
-                                String NRazlog = new String();
-                                String NStatus = new String();
-                                String NTermin = new String();
-                                String NID = new String();
-
-                                NDatum = a.getDatum();
-                                NRazlog = a.getRazlog();
-                                NTermin = a.getTermin();
-                                NStatus = "Odobreno";
-                                NID = a.getID();
-
-                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
-                                Date now = new Date(System.currentTimeMillis());
+                                String NDatum = a.getDatum();
+                                String NRazlog = a.getRazlog();
+                                String NTermin = a.getTermin();
+                                String NStatus = "Odobreno";
+                                String NID = a.getID();
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
-                                    if (d.compareTo(now) >= 0) {
-
+                                    if (d.after(now)) {
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
+                                    }else if(d.equals(now)){
                                         ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
                                     }
 

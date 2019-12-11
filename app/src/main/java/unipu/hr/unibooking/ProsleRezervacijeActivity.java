@@ -63,6 +63,14 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
         MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
         mListView.setAdapter(adapter);
 
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date now = c.getTime();
+
         FirebaseDatabase.getInstance().getReference().child("Rezervacije")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -75,25 +83,17 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
 
                             if (a.getEmailUsera().equals(firebaseUser.getEmail())) {
 
-                                String NDatum = new String();
-                                String NRazlog = new String();
-                                String NStatus = new String();
-                                String NTermin = new String();
-                                String NID = new String();
-
-                                NDatum = a.getDatum();
-                                NRazlog = a.getRazlog();
-                                NTermin = a.getTermin();
-                                NStatus = "Proslo";
-                                NID = a.getID();
+                                String NDatum = a.getDatum();
+                                String NRazlog = a.getRazlog();
+                                String NTermin = a.getTermin();
+                                String NStatus = "Proslo";
+                                String NID = a.getID();
 
 
-                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
-                                Date now = new Date(System.currentTimeMillis());
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
-                                    if (d.compareTo(now) < 0) {
+                                    if (d.before(now)) {
                                         ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
                                     }
 

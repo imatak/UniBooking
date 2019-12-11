@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
     Rezervacija rezervacija;
     Toolbar toolbar1;
     private DrawerLayout drawer;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,14 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
         ArrayList<MojeRezervacijeStudent> ListaMojihRezervacija = new ArrayList<>();
         MojeRezervacijeListAdapter adapter =new MojeRezervacijeListAdapter(this, R.layout.adapterviewlayout, ListaMojihRezervacija);
         mListView.setAdapter(adapter);
+        SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+        Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        Date now = c.getTime();
 
         //loop za punjenje ListViewa podacima iz firebasea
         FirebaseDatabase.getInstance().getReference().child("Rezervacije")
@@ -76,27 +87,17 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Rezervacija a = snapshot.getValue(Rezervacija.class);
 
-                                String NVrijeme = new String();
-                                String NDatum = new String();
-                                String NEmail = new String();
-                                String NRazlog = new String();
-                                String NStatus = new String();
-                                String NID = new String();
+                                String NVrijeme = a.getTermin();
+                                String NEmail = a.getEmailUsera();
+                                String NRazlog = a.getRazlog();
+                                String NDatum = a.getDatum();
+                                String NStatus = "Odobreno";
+                                String NID = a.getID();
 
-                                NVrijeme = a.getTermin();
-                                NEmail = a.getEmailUsera();
-                                NRazlog = a.getRazlog();
-                                NDatum = a.getDatum();
-                                NStatus = "Odobreno";
-                                NID = a.getID();
-
-                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
-                                Date now = new Date(System.currentTimeMillis());
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
-                                    if (d.compareTo(now) >= 0) {
-
+                                    if (d.equals(now)) {
                                         ListaMojihRezervacija.add(new MojeRezervacijeStudent(NVrijeme, NEmail, NRazlog, NStatus, NID));
                                     }
 
