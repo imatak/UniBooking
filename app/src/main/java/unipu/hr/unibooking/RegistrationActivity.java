@@ -17,6 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     EditText email_reg;
@@ -59,9 +62,19 @@ public class RegistrationActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(RegistrationActivity.this, "Registracija uspješna!"
                                                     , Toast.LENGTH_LONG).show();
+
+                                            String email = email_reg.getText().toString();
                                             email_reg.setText("");
                                             password_reg.setText("");
-                                            startActivity(new Intent(RegistrationActivity.this, ProfileActivity.class));
+
+                                            Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@unipu.hr");
+                                            Matcher mat = pattern.matcher(email);
+
+                                            if(mat.matches()){
+                                                startActivity(new Intent(RegistrationActivity.this, RadnikDashboardActivity.class));
+                                            }else{
+                                                startActivity(new Intent(RegistrationActivity.this, ProfileActivity.class));
+                                            }
                                         } else {
                                             Toast.makeText(RegistrationActivity.this, task.getException().getMessage()
                                                     , Toast.LENGTH_LONG).show();

@@ -136,6 +136,15 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
             }
         });
 
+        Calendar cal = Calendar.getInstance();
+        int year  = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int date  = cal.get(Calendar.DAY_OF_MONTH);
+        curDate ="" + date + "." + (month+1) + "." + year + ".";
+
+        kalendar.setMinDate(cal.getTimeInMillis()+24*60*60*1000);
+        kalendar.setMaxDate(cal.getTimeInMillis()+1209600*1000);
+
         //kalendar listener za datum
         kalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -173,6 +182,7 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
                 Spremi.setClickable(true);
                 Toast.makeText(RezervirajActivity.this, "Termin je uspješno rezerviran!"
                         , Toast.LENGTH_LONG).show();
+                startActivity(new Intent(RezervirajActivity.this, ProfileActivity.class));
             }
         });
 

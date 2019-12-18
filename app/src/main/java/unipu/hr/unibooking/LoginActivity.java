@@ -17,6 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity {
 
     Toolbar toolbar;
@@ -53,7 +56,15 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                        String email = userEmail.getText().toString();
+                                        Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@unipu.hr");
+                                        Matcher mat = pattern.matcher(email);
+
+                                        if(mat.matches()){
+                                            startActivity(new Intent(LoginActivity.this, RadnikDashboardActivity.class));
+                                        }else{
+                                            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                        }
                                     } else {
                                         Toast.makeText(LoginActivity.this, task.getException().getMessage()
                                                 , Toast.LENGTH_LONG).show();

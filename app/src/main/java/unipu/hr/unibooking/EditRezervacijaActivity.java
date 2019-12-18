@@ -134,6 +134,16 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
         kalendar.setDate(date1.getTime());
         rezervacija.setDatum(value.getDatum());
 
+        Calendar cal = Calendar.getInstance();
+        kalendar.setMinDate(cal.getTimeInMillis()+24*60*60*1000);
+        kalendar.setMaxDate(cal.getTimeInMillis()+1209600*1000);
+        cal.setTimeInMillis(kalendar.getDate());
+        int year  = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int date  = cal.get(Calendar.DAY_OF_MONTH);
+        curDate ="" + date + "." + (month+1) + "." + year + ".";
+
+
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
