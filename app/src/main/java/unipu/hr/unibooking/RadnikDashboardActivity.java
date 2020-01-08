@@ -91,7 +91,7 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
                                 String NEmail = a.getEmailUsera();
                                 String NRazlog = a.getRazlog();
                                 String NDatum = a.getDatum();
-                                String NStatus = "Odobreno";
+                                String NStatus = a.getStatus();
                                 String NID = a.getID();
 
 

@@ -7,6 +7,7 @@ public class Rezervacija {
     private String Razlog;
     private String Termin;
     private String ID;
+    private String Status;
 
     public Rezervacija() {
     }
@@ -54,4 +55,8 @@ public class Rezervacija {
     public String getID() { return ID; }
 
     public void setID(String ID) { this.ID = ID; }
+
+    public String getStatus() { return Status; }
+
+    public void setStatus(String status) { Status = status; }
 }

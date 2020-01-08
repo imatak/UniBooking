@@ -121,7 +121,7 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                                 String NDatum = a.getDatum();
                                 String NRazlog = a.getRazlog();
                                 String NTermin = a.getTermin();
-                                String NStatus = "Odobreno";
+                                String NStatus = a.getStatus();
                                 String NID = a.getID();
 
                                 try {

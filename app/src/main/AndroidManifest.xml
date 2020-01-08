@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RadnikPretrazivanjeActivity"></activity>
+        <activity android:name=".RadnikEditRezervacijaActivity" />
+        <activity android:name=".RadnikPretrazivanjeActivity" />
         <activity android:name=".RadnikPregledRezervacijaActivity" />
         <activity android:name=".RadnikDashboardActivity" />
         <activity android:name=".EditRezervacijaActivity" />

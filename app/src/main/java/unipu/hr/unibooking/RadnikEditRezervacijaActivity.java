@@ -1,16 +1,14 @@
 package unipu.hr.unibooking;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-
-import android.content.Intent;
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,14 +24,20 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-public class RezervirajActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class RadnikEditRezervacijaActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
 
 
@@ -42,10 +46,14 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
     Spinner razlog;
     TextView userEmailSpremi;
     EditText userText;
-    Button Spremi;
+    Button odobri;
     Toolbar toolbar;
     ProgressBar progressBar;
     String curDate;
+    Button otkazi;
+
+    TextView Teksttermin;
+    TextView TekstRazlog;
 
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -55,11 +63,14 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rezerviraj);
+        setContentView(R.layout.activity_radnik_edit_rezervacija);
+
+        Intent i = getIntent();
+        MojeRezervacijeStudent value = (MojeRezervacijeStudent) i.getSerializableExtra("Uredi");
+        String ID_rezervacije = value.getID();
 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
-
 
         kalendar = findViewById(R.id.kalendarRezervacijeR);
         termin = findViewById(R.id.terminSpinnerR);
@@ -67,13 +78,13 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         userEmailSpremi = findViewById(R.id.userEmailSpremiR);
         userText = findViewById(R.id.userTextR);
         progressBar = findViewById(R.id.progressBar_userR);
-        Spremi = findViewById(R.id.btnSaveR);
+        odobri = findViewById(R.id.btnSaveR);
+        otkazi = findViewById(R.id.btnDeleteR);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         rezervacija = new Rezervacija();
         reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
-
 
         List<String> categoriesTermin = new ArrayList<String>();
         categoriesTermin.add("12:00");
@@ -88,7 +99,6 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         categoriesTermin.add("13:30");
         categoriesTermin.add("13:40");
         categoriesTermin.add("13:50");
-
 
         List<String> categories = new ArrayList<String>();
         categories.add("Ispis kolegija");
@@ -107,6 +117,32 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         // attaching data adapter to spinner
         razlog.setAdapter(dataAdapter);
         termin.setAdapter(dataAdapterTermin);
+
+        int spinnerPositionRazlog = dataAdapter.getPosition(value.getRazlog());
+        razlog.setSelection(spinnerPositionRazlog);
+        //rezervacija.setRazlog(value.getRazlog());
+        int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getVrijeme());
+        termin.setSelection(spinnerPositionTermin);
+        SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy.");
+        //rezervacija.setTermin(value.getVrijeme());
+        Date date1 = new Date();
+        try {
+            date1=formatter1.parse(value.getDatum());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        kalendar.setDate(date1.getTime());
+        rezervacija.setDatum(value.getDatum());
+
+        Calendar cal = Calendar.getInstance();
+        kalendar.setMinDate(cal.getTimeInMillis()+24*60*60*1000);
+        kalendar.setMaxDate(cal.getTimeInMillis()+1209600*1000);
+        cal.setTimeInMillis(kalendar.getDate());
+        int year  = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int date  = cal.get(Calendar.DAY_OF_MONTH);
+        curDate ="" + date + "." + (month+1) + "." + year + ".";
+
 
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -136,15 +172,6 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
             }
         });
 
-        Calendar cal = Calendar.getInstance();
-        int year  = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int date  = cal.get(Calendar.DAY_OF_MONTH);
-        curDate ="" + date + "." + (month+1) + "." + year + ".";
-
-        kalendar.setMinDate(cal.getTimeInMillis()+24*60*60*1000);
-        kalendar.setMaxDate(cal.getTimeInMillis()+1209600*1000);
-
         //kalendar listener za datum
         kalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
@@ -155,42 +182,76 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
                 String m = String.valueOf(month+1);
                 String y = String.valueOf(year);
                 curDate ="" + d + "." + m + "." + y + ".";
+                rezervacija.setDatum(curDate);
                 //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
             }
         });
 
 
-        Spremi.setOnClickListener(new View.OnClickListener() {
+        odobri.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                Spremi.setClickable(false);
-                //int a = Integer.parseInt(datum.getTex...)
-                // rezervacija.setDatum(a);
-                Calendar cl = Calendar.getInstance();
-                //cl.setTimeInMillis(curDate);
-                //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
-                //String time = "" + cl.get(Calendar.HOUR_OF_DAY) + ":" + cl.get(Calendar.MINUTE) + ":" + cl.get(Calendar.SECOND);
+                // petlja za pretraživanje rezervacija za trenutno prijavljenog korisnika
+                FirebaseDatabase.getInstance().getReference().child("Rezervacije")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Rezervacija a = snapshot.getValue(Rezervacija.class);
 
-                rezervacija.setDatum(curDate);
-                rezervacija.setEmailUsera(userEmailSpremi.getText().toString().trim());
-                rezervacija.setStatus("Odobreno");
-                //rezervacija.setUserTekst(userText.getText().toString().trim());
-                String key = reff.push().getKey();
-                rezervacija.setID(key);
-                reff.child(key).setValue(rezervacija);
-                //reff.push().setValue(rezervacija);
-                progressBar.setVisibility(View.INVISIBLE);
-                Spremi.setClickable(true);
-                Toast.makeText(RezervirajActivity.this, "Termin je uspješno rezerviran!"
-                        , Toast.LENGTH_LONG).show();
-                startActivity(new Intent(RezervirajActivity.this, ProfileActivity.class));
+
+                                    if (a.getID().equals(value.getID())) {
+                                        reff.child(a.getID()).child("status").setValue("Odobreno");
+                                    }
+                                }
+
+                                Intent intent = new Intent(RadnikEditRezervacijaActivity.this, RadnikDashboardActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(RadnikEditRezervacijaActivity.this, "Rezervacija je odobrena!"
+                                        , Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
             }
+
+        });
+
+        otkazi.setOnClickListener(new View.OnClickListener() {
+            public void onClick (View view) {
+                // petlja za pretraživanje rezervacija za trenutno prijavljenog korisnika
+                FirebaseDatabase.getInstance().getReference().child("Rezervacije")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    Rezervacija a = snapshot.getValue(Rezervacija.class);
+
+
+                                    if (a.getID().equals(value.getID())) {
+                                        reff.child(a.getID()).child("status").setValue("Otkazano");
+                                    }
+                                }
+
+                                Intent intent = new Intent(RadnikEditRezervacijaActivity.this, RadnikDashboardActivity.class);
+                                startActivity(intent);
+                                Toast.makeText(RadnikEditRezervacijaActivity.this, "Rezervacija je otkazana!"
+                                        , Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+            }
+
         });
 
 
         userEmailSpremi.setText(firebaseUser.getEmail());
 
-
+        /*
         drawer = findViewById(R.id.drawer_layoutRezerviraj);
         NavigationView navigationView =findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -198,35 +259,37 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+         */
     }
 
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.glavniizbornik:
-                Intent intent = new Intent(RezervirajActivity.this, ProfileActivity.class);
+            case R.id.glavniizbornikRadnik:
+                Intent intent = new Intent(RadnikEditRezervacijaActivity.this, RadnikDashboardActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.mojerezervacije:
-                intent = new Intent(RezervirajActivity.this, MojeRezervacijeActivity.class);
+            case R.id.Pregledrezervacija:
+                intent = new Intent(RadnikEditRezervacijaActivity.this,RadnikPregledRezervacijaActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.rezerviraj:
-                intent = new Intent(RezervirajActivity.this, RezervirajActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.proslerezervacije:
-                intent = new Intent(RezervirajActivity.this, ProsleRezervacijeActivity.class);
+            case R.id.Pretrazivanje:
+                intent = new Intent(RadnikEditRezervacijaActivity.this, RadnikPretrazivanjeActivity.class);
                 startActivity(intent);
                 break;
             case R.id.odjava:
                 FirebaseAuth.getInstance().signOut();
-                intent = new Intent(RezervirajActivity.this, MainActivity.class);
+                intent = new Intent(RadnikEditRezervacijaActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
 
+
         }
+
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -239,3 +302,4 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         }
     }
 }
+

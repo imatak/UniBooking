@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -104,6 +105,17 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
         mListView.setAdapter(adapter);
         SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
 
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                MojeRezervacijeStudent value = (MojeRezervacijeStudent) adapter.getItem(i);
+                //value.getDatum();
+                Intent intent = new Intent(RadnikPregledRezervacijaActivity.this, RadnikEditRezervacijaActivity.class);
+                intent.putExtra("Uredi",value);
+                startActivity(intent);
+            }
+        });
+
         FirebaseDatabase.getInstance().getReference().child("Rezervacije")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -115,7 +127,7 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                             String NTermin = a.getTermin();
                             String NEmail = a.getEmailUsera();
                             String NRazlog = a.getRazlog();
-                            String NStatus = "Odobreno";
+                            String NStatus = a.getStatus();
                             String NID = a.getID();
 
                             try {

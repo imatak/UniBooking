@@ -123,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                                 String NDatum = a.getDatum();
                                 String NRazlog = a.getRazlog();
                                 String NTermin = a.getTermin();
-                                String NStatus = "Odobreno";
+                                String NStatus = a.getStatus();
                                 String NID = a.getID();
 
 

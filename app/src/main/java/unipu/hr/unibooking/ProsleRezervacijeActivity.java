@@ -86,7 +86,7 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                                 String NDatum = a.getDatum();
                                 String NRazlog = a.getRazlog();
                                 String NTermin = a.getTermin();
-                                String NStatus = "Proslo";
+                                String NStatus = "Prošlo";
                                 String NID = a.getID();
 
 
