@@ -236,7 +236,7 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
 
                                 Intent intent = new Intent(RadnikEditRezervacijaActivity.this, RadnikDashboardActivity.class);
                                 startActivity(intent);
-                                Toast.makeText(RadnikEditRezervacijaActivity.this, "Rezervacija je uspješno otkazana!"
+                                Toast.makeText(RadnikEditRezervacijaActivity.this, "Rezervacija je otkazana!"
                                         , Toast.LENGTH_LONG).show();
                             }
 

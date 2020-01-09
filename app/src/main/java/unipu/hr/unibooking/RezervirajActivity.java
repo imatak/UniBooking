@@ -140,7 +140,7 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         int year  = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int date  = cal.get(Calendar.DAY_OF_MONTH);
-        curDate ="" + date + "." + (month+1) + "." + year + ".";
+        curDate ="" + (date+1) + "." + (month+1) + "." + year + ".";
 
         kalendar.setMinDate(cal.getTimeInMillis()+24*60*60*1000);
         kalendar.setMaxDate(cal.getTimeInMillis()+1209600*1000);
