@@ -96,7 +96,7 @@
                     android:gravity="center"
                     android:layout_weight="25"
                     android:id="@+id/emailtab"
-                    android:text="Email"/>
+                    android:text="Datum"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="50dp"

@@ -94,11 +94,10 @@ public class RadnikDashboardActivity extends AppCompatActivity implements Naviga
                                 String NStatus = a.getStatus();
                                 String NID = a.getID();
 
-
                                 try {
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.equals(now)) {
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NVrijeme, NEmail, NRazlog, NStatus, NID));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NVrijeme, NDatum, NRazlog, NStatus, NID, NEmail));
                                     }
 
                                 }

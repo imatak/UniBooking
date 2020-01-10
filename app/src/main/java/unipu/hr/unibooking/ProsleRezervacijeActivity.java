@@ -88,13 +88,14 @@ public class ProsleRezervacijeActivity extends AppCompatActivity implements Navi
                                 String NTermin = a.getTermin();
                                 String NStatus = "Prošlo";
                                 String NID = a.getID();
+                                String NEmail = a.getEmailUsera();
 
 
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.before(now)) {
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail));
                                     }
 
                                 }

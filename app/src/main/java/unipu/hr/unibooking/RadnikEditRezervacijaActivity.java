@@ -51,6 +51,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
     ProgressBar progressBar;
     String curDate;
     Button otkazi;
+    TextView terminTXT;
+    TextView razlogTXT;
 
     TextView Teksttermin;
     TextView TekstRazlog;
@@ -80,6 +82,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         progressBar = findViewById(R.id.progressBar_userR);
         odobri = findViewById(R.id.btnSaveR);
         otkazi = findViewById(R.id.btnDeleteR);
+        terminTXT = findViewById(R.id.terminTxtR);
+        razlogTXT = findViewById(R.id.razlogTxtR);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -121,8 +125,11 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         int spinnerPositionRazlog = dataAdapter.getPosition(value.getRazlog());
         razlog.setSelection(spinnerPositionRazlog);
         //rezervacija.setRazlog(value.getRazlog());
-        int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getVrijeme());
+        int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getDatum());
         termin.setSelection(spinnerPositionTermin);
+        razlogTXT.setText(value.getRazlog());
+        terminTXT.setText(value.getVrijeme());
+
         SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy.");
         //rezervacija.setTermin(value.getVrijeme());
         Date date1 = new Date();

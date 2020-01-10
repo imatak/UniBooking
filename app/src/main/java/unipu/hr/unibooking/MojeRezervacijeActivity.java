@@ -123,13 +123,14 @@ public class MojeRezervacijeActivity extends AppCompatActivity implements Naviga
                                 String NTermin = a.getTermin();
                                 String NStatus = a.getStatus();
                                 String NID = a.getID();
+                                String NEmail = a.getEmailUsera();
 
                                 try {
                                     Date d=dateFormat.parse(NDatum);
                                     if (d.after(now)) {
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail));
                                     }else if(d.equals(now)){
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail));
                                     }
 
                                 }

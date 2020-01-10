@@ -133,13 +133,13 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                             try {
                                 Date d=dateFormat.parse(NDatum);
                                 if (d.after(now) && Poz=="sve") {
-                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog,  NID));
+                                        ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog,  NID , NEmail));
                                         emailtab.setText("Datum");
 
                                 }
                                 if(d.equals(now) && Poz!="sve"){
-                                    ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NEmail,NStatus, NRazlog, NID));
-                                    emailtab.setText("Email");
+                                    ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog, NID, NEmail));
+                                    emailtab.setText("Datum");
                                 }
 
                             }

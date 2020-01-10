@@ -109,9 +109,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                         Date d2 = c.getTime();
                         Date d3 = c.getTime();
 
-                        MojeRezervacijeStudent mrs1 = new MojeRezervacijeStudent("","","","", "");
-                        MojeRezervacijeStudent mrs2 = new MojeRezervacijeStudent("","","","", "");
-                        MojeRezervacijeStudent mrs3 = new MojeRezervacijeStudent("","","","", "");
+                        MojeRezervacijeStudent mrs1 = new MojeRezervacijeStudent("","","","", "", "");
+                        MojeRezervacijeStudent mrs2 = new MojeRezervacijeStudent("","","","", "", "");
+                        MojeRezervacijeStudent mrs3 = new MojeRezervacijeStudent("","","","", "", "");
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             Rezervacija a = snapshot.getValue(Rezervacija.class);
@@ -125,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                                 String NTermin = a.getTermin();
                                 String NStatus = a.getStatus();
                                 String NID = a.getID();
+                                String NEmail = a.getEmailUsera();
 
 
                                 try {
@@ -136,17 +137,17 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
                                             d1=d;
                                             mrs3=mrs2;
                                             mrs2=mrs1;
-                                            mrs1 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
+                                            mrs1 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail);
 
                                         } else if (d.before(d2)) {
                                             d3 = d2;
                                             d2 = d;
                                             mrs3 = mrs2;
-                                            mrs2 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
+                                            mrs2 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail);
 
                                         } else if (d.before(d3)) {
                                             d3=d;
-                                            mrs3 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID);
+                                            mrs3 = new MojeRezervacijeStudent(NDatum, NTermin, NStatus, NRazlog, NID, NEmail);
 
                                         }
                                     }

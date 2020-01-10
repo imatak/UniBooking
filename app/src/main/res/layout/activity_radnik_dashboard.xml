@@ -61,7 +61,7 @@
                 android:textSize="20sp"
                 android:gravity="center"
                 android:layout_weight="25"
-                android:text="Email"/>
+                android:text="Datum"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="50dp"
