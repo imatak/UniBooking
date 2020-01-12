@@ -42,8 +42,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
 
 
     CalendarView kalendar;
-    Spinner termin;
-    Spinner razlog;
+    TextView termin;
+    TextView razlog;
     TextView userEmailSpremi;
     EditText userText;
     Button odobri;
@@ -74,7 +74,7 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         Toolbar toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
-        kalendar = findViewById(R.id.kalendarRezervacijeR);
+        //kalendar = findViewById(R.id.kalendarRezervacijeR);
         termin = findViewById(R.id.terminSpinnerR);
         razlog = findViewById(R.id.razlogSpinnerR);
         userEmailSpremi = findViewById(R.id.userEmailSpremiR);
@@ -89,7 +89,7 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         firebaseUser = firebaseAuth.getCurrentUser();
         rezervacija = new Rezervacija();
         reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
-
+        /*
         List<String> categoriesTermin = new ArrayList<String>();
         categoriesTermin.add("12:00");
         categoriesTermin.add("12:10");
@@ -119,17 +119,19 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
-        razlog.setAdapter(dataAdapter);
-        termin.setAdapter(dataAdapterTermin);
-
+        //razlog.setAdapter(dataAdapter);
+        //termin.setAdapter(dataAdapterTermin); */
+        /*
         int spinnerPositionRazlog = dataAdapter.getPosition(value.getRazlog());
-        razlog.setSelection(spinnerPositionRazlog);
+        //razlog.setSelection(spinnerPositionRazlog);
         //rezervacija.setRazlog(value.getRazlog());
         int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getDatum());
-        termin.setSelection(spinnerPositionTermin);
-        razlogTXT.setText(value.getRazlog());
-        terminTXT.setText(value.getVrijeme());
-
+        //termin.setSelection(spinnerPositionTermin);
+        termin.setText(value.getVrijeme());
+        razlog.setText(value.getRazlog());
+        //razlogTXT.setText(value.getRazlog());
+        //terminTXT.setText(value.getVrijeme());
+*/         /*
         SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy.");
         //rezervacija.setTermin(value.getVrijeme());
         Date date1 = new Date();
@@ -138,7 +140,9 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        kalendar.setDate(date1.getTime());
+        */
+        /*
+        //kalendar.setDate(date1.getTime());
         rezervacija.setDatum(value.getDatum());
 
         Calendar cal = Calendar.getInstance();
@@ -149,8 +153,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         int month = cal.get(Calendar.MONTH);
         int date  = cal.get(Calendar.DAY_OF_MONTH);
         curDate ="" + date + "." + (month+1) + "." + year + ".";
-
-
+        */
+        /*
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -164,7 +168,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
                 // your code here
             }
         });
-
+        */
+        /*
         termin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -178,8 +183,9 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
                 // your code here
             }
         });
-
+        */
         //kalendar listener za datum
+        /*
         kalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
@@ -193,7 +199,10 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
                 //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
             }
         });
+        */
 
+        termin.setText(value.getDatum());
+        razlog.setText(value.getRazlog());
 
         odobri.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
