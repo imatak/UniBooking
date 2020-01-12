@@ -44,6 +44,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
     CalendarView kalendar;
     TextView termin;
     TextView razlog;
+    TextView datum;
+    TextView datumTXT;
     TextView userEmailSpremi;
     EditText userText;
     Button odobri;
@@ -84,6 +86,8 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         otkazi = findViewById(R.id.btnDeleteR);
         terminTXT = findViewById(R.id.terminTxtR);
         razlogTXT = findViewById(R.id.razlogTxtR);
+        datumTXT = findViewById(R.id.datumSpinnerR);
+        //datum = findViewById(R.id.datumTxtR);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
@@ -203,6 +207,7 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
 
         termin.setText(value.getDatum());
         razlog.setText(value.getRazlog());
+        datumTXT.setText(value.getVrijeme());
 
         odobri.setOnClickListener(new View.OnClickListener() {
             public void onClick (View view) {
