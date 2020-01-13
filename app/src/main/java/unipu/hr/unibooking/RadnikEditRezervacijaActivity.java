@@ -68,13 +68,13 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radnik_edit_rezervacija);
+        Toolbar toolbar = findViewById(R.id.toolbarRadnikEdit);
+
+        setSupportActionBar(toolbar);
 
         Intent i = getIntent();
         MojeRezervacijeStudent value = (MojeRezervacijeStudent) i.getSerializableExtra("Uredi");
         String ID_rezervacije = value.getID();
-
-        Toolbar toolbar = findViewById(R.id.toolbar1);
-        setSupportActionBar(toolbar);
 
         //kalendar = findViewById(R.id.kalendarRezervacijeR);
         termin = findViewById(R.id.terminSpinnerR);
@@ -93,6 +93,17 @@ public class RadnikEditRezervacijaActivity extends AppCompatActivity implements 
         firebaseUser = firebaseAuth.getCurrentUser();
         rezervacija = new Rezervacija();
         reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
+
+
+        //nav bar
+        drawer = findViewById(R.id.drawer_layoutRadnikEditRezervacija);
+        NavigationView navigationView =findViewById(R.id.nav_viewRadnikEdit);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_nav_drawer, R.string.close_nav_drawer);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
         /*
         List<String> categoriesTermin = new ArrayList<String>();
         categoriesTermin.add("12:00");

@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            android:id="@+id/toolbar1"
+            android:id="@+id/toolbarRadnikEdit"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             android:elevation="4dp"/>
@@ -191,8 +191,8 @@
         android:background="@color/white"
         app:itemTextColor="@color/colorButton"
         app:itemIconTint="@color/colorButton"
-        android:id="@+id/nav_view"
-        app:menu="@menu/meni"
+        android:id="@+id/nav_viewRadnikEdit"
+        app:menu="@menu/meni_radnik"
         android:layout_gravity="start">
 
     </com.google.android.material.navigation.NavigationView>
