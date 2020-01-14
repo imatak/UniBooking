@@ -126,7 +126,7 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                             String NDatum = a.getDatum();
                             String NTermin = a.getTermin();
                             String NEmail = a.getEmailUsera();
-                            String NRazlog = a.getRazlog();
+                                               String NRazlog = a.getRazlog();
                             String NStatus = a.getStatus();
                             String NID = a.getID();
 
@@ -135,11 +135,27 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                                 if (d.after(now) && Poz=="sve") {
                                         ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog,  NID , NEmail));
                                         emailtab.setText("Datum");
+                                        adapter.notifyDataSetChanged();
+
 
                                 }
-                                if(d.equals(now) && Poz!="sve"){
+                                else if(d.equals(now) && Poz=="today"){
                                     ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog, NID, NEmail));
                                     emailtab.setText("Datum");
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else if(d.compareTo(now) == 0 && Poz=="tomorrow"){
+                                    ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog, NID, NEmail));
+                                    emailtab.setText("Datum");
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else if(d.compareTo(now) == 0 && Poz=="trazi"){
+                                    ListaMojihRezervacija.add(new MojeRezervacijeStudent(NTermin, NDatum, NStatus, NRazlog, NID, NEmail));
+                                    emailtab.setText("Datum");
+                                    adapter.notifyDataSetChanged();
+                                }
+                                else{
+                                    adapter.notifyDataSetChanged();
                                 }
 
                             }
@@ -161,6 +177,23 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                 });
     }
 
+    public Date settime(Integer time){
+        Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+
+        c.add(Calendar.DAY_OF_MONTH, time);
+
+        Date now = c.getTime();
+
+        return now;
+
+    }
+
 
     @Override
     public void onClick(View view)
@@ -168,43 +201,19 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
         Calendar c = Calendar.getInstance();
         switch (view.getId()) {
             case R.id.ButtonRadnikDanas:
-                c.set(Calendar.HOUR_OF_DAY, 0);
-                c.set(Calendar.MINUTE, 0);
-                c.set(Calendar.SECOND, 0);
-                c.set(Calendar.MILLISECOND, 0);
-
-                Date now = c.getTime();
-
-                FillTable(now, "danas");
+                FillTable(settime(0), "today");
                 break;
             case R.id.ButtonRadnikSutra:
-                Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY, 1);
-                c.set(Calendar.MINUTE, 1);
-                c.set(Calendar.SECOND, 1);
-                c.set(Calendar.MILLISECOND, 1);
-
-                now = c.getTime();
-
-                FillTable(now, "sutra");
-
+                FillTable(settime(1), "tomorrow");
                 break;
             case R.id.ButtonRadnikNaprijed:
-                c.set(Calendar.HOUR_OF_DAY, -1);
-                c.set(Calendar.MINUTE, -1);
-                c.set(Calendar.SECOND, -1);
-                c.set(Calendar.MILLISECOND, -1);
-
-                now = c.getTime();
-
-                FillTable(now, "sve");
-
+                FillTable(settime(-1), "sve");
                 break;
             case R.id.ButtonRadnikTrazi:
                 SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
                 try {
                     c.setTime(dateFormat.parse(EnterTextPregledRadnik.getText().toString()));
-                    now = c.getTime();
+                    Date now = c.getTime();
                     FillTable(now, "trazi");
                 }
                 catch(Exception e) {
