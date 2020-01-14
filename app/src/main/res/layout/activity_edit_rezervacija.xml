@@ -144,9 +144,12 @@ tools:context=".EditRezervacijaActivity">
             android:layout_marginEnd="156dp"
             android:layout_marginBottom="136dp"
             android:background="#008AFF"
-            android:text="Ažuriraj"
+            android:text="   Ažuriraj"
             android:textColor="#ffffff"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/yes"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
 
         <Button
             android:id="@+id/btnDeleteR"
@@ -159,9 +162,12 @@ tools:context=".EditRezervacijaActivity">
             android:layout_marginEnd="156dp"
             android:layout_marginBottom="68dp"
             android:background="#008AFF"
-            android:text="Izbriši"
+            android:text="    Izbriši     "
             android:textColor="#ffffff"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:drawableLeft="@drawable/no"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
 
 
     </RelativeLayout>

@@ -71,6 +71,8 @@
         android:background="#008AFF"
         android:text="Registracija"
         android:textColor="#ffffff"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
 
 </RelativeLayout>

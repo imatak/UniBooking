@@ -23,9 +23,11 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="#008AFF"
-        android:text="Prijava"
+        android:text="      Prijava     "
         android:textColor="#ffffff"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
 
     <Button
         android:id="@+id/btnSignUp"
@@ -37,6 +39,8 @@
         android:background="#008AFF"
         android:text="Registracija"
         android:textColor="#ffffff"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
 
 </RelativeLayout>
