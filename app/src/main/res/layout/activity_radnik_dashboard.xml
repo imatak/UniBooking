@@ -98,7 +98,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="138dp"
                 android:layout_marginBottom="188dp"
-                android:text="Pregled Rezervacija" />
+                android:text="Pregled Rezervacija"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/buttonRadnikPretraživanje"
@@ -108,7 +109,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="138dp"
                 android:layout_marginBottom="70dp"
-                android:text="Pretraživanje" />
+                android:text="Pretraživanje"
+                android:visibility="invisible"/>
 
         </RelativeLayout>
 
