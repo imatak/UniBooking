@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.service.autofill.FillCallback;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,16 +28,20 @@ import android.widget.Toast;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RezervirajActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawer;
-
 
     CalendarView kalendar;
     Spinner termin;
@@ -61,6 +67,8 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         setSupportActionBar(toolbar);
 
 
+
+
         kalendar = findViewById(R.id.kalendarRezervacijeR);
         termin = findViewById(R.id.terminSpinnerR);
         razlog = findViewById(R.id.razlogSpinnerR);
@@ -74,8 +82,9 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         rezervacija = new Rezervacija();
         reff = FirebaseDatabase.getInstance().getReference().child("Rezervacije");
 
-
         List<String> categoriesTermin = new ArrayList<String>();
+
+
         categoriesTermin.add("12:00");
         categoriesTermin.add("12:10");
         categoriesTermin.add("12:20");
@@ -90,6 +99,10 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         categoriesTermin.add("13:50");
 
 
+        Date now = Calendar.getInstance().getTime();
+
+        LoopTable(now, categoriesTermin);
+
         List<String> categories = new ArrayList<String>();
         categories.add("Ispis kolegija");
         categories.add("Upis na studij");
@@ -98,15 +111,12 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        ArrayAdapter<String> dataAdapterTermin = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoriesTermin);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         razlog.setAdapter(dataAdapter);
-        termin.setAdapter(dataAdapterTermin);
 
         razlog.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -157,8 +167,25 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
                 String y = String.valueOf(year);
                 curDate ="" + d + "." + m + "." + y + ".";
                 //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
+
+                try {
+
+                    Date date1=new SimpleDateFormat("dd.MM.yyyy").parse(curDate);
+
+                    LoopTable(date1, categoriesTermin);
+
+
+
+                }
+                catch(Exception e) {
+                    //java.text.ParseException: Unparseable date: Geting error
+                    System.out.println("Excep"+e);
+                }
+
+
             }
         });
+
 
 
         Spremi.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +258,70 @@ public class RezervirajActivity extends AppCompatActivity implements NavigationV
         return true;
     }
 
+    public void LoopTable(Date d, List<String> categoriesTermin){
+        List<String> ListaPostojecihTermina = new ArrayList<String>();
+
+        FirebaseDatabase.getInstance().getReference().child("Rezervacije")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Rezervacija a = snapshot.getValue(Rezervacija.class);
+                                String NDatum = a.getDatum();
+                                String NTermin = a.getTermin();
+                            try {
+                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+                                Date baza=dateFormat.parse(NDatum);
+                                if(baza.equals(d)){
+                                    ListaPostojecihTermina.add(NTermin);
+                                }
+
+                            }
+                            catch(Exception e) {
+                                //java.text.ParseException: Unparseable date: Geting error
+                                System.out.println("Excep"+e);
+                            }
+
+                        }
+                        List<String> union = new ArrayList(categoriesTermin);
+                        union.addAll(ListaPostojecihTermina);
+                        List<String> intersection = new ArrayList(categoriesTermin);
+                        intersection.retainAll(ListaPostojecihTermina);
+                        List<String> symmetricDifference = new ArrayList(union);
+                        symmetricDifference.removeAll(intersection);
+
+
+                        ArrayAdapter<String> dataAdapterTermin = new ArrayAdapter<String>(RezervirajActivity.this,android.R.layout.simple_spinner_item,symmetricDifference);
+                        dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        termin.setAdapter(dataAdapterTermin);
+
+                        /*
+                        for (int i=0;i<categoriesTermin.size();i++){
+                            System.out.println("categroje" +categoriesTermin.get(i));
+                            for (int a=0;a<ListaPostojecihTermina.size();a++){
+                                System.out.println("Postojeci" +ListaPostojecihTermina.get(a));
+                                if (categoriesTermin.get(i)== ListaPostojecihTermina.get(a)){
+                                    System.out.println("true");
+                                    categoriesTermin.remove(i);
+                                    dataAdapterTermin.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                        */
+
+                        dataAdapterTermin.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+
+
+
+
+        }
     @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){

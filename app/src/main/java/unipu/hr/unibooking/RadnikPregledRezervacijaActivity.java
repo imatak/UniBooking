@@ -126,7 +126,7 @@ public class RadnikPregledRezervacijaActivity extends AppCompatActivity implemen
                             String NDatum = a.getDatum();
                             String NTermin = a.getTermin();
                             String NEmail = a.getEmailUsera();
-                                               String NRazlog = a.getRazlog();
+                            String NRazlog = a.getRazlog();
                             String NStatus = a.getStatus();
                             String NID = a.getID();
 
