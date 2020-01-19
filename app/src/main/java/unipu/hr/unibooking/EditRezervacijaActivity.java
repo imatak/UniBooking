@@ -72,6 +72,7 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
         Toolbar toolbar = findViewById(R.id.toolbar1);
         setSupportActionBar(toolbar);
 
+
         kalendar = findViewById(R.id.kalendarRezervacijeR);
         termin = findViewById(R.id.terminSpinnerR);
         razlog = findViewById(R.id.razlogSpinnerR);
@@ -100,6 +101,11 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
         categoriesTermin.add("13:40");
         categoriesTermin.add("13:50");
 
+
+        Date now = Calendar.getInstance().getTime();
+
+        LoopTable(now, categoriesTermin);
+
         List<String> categories = new ArrayList<String>();
         categories.add("Ispis kolegija");
         categories.add("Upis na studij");
@@ -108,21 +114,16 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        ArrayAdapter<String> dataAdapterTermin = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categoriesTermin);
 
         // Drop down layout style - list view with radio button
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // attaching data adapter to spinner
         razlog.setAdapter(dataAdapter);
-        termin.setAdapter(dataAdapterTermin);
 
         int spinnerPositionRazlog = dataAdapter.getPosition(value.getRazlog());
         razlog.setSelection(spinnerPositionRazlog);
         //rezervacija.setRazlog(value.getRazlog());
-        int spinnerPositionTermin = dataAdapterTermin.getPosition(value.getVrijeme());
-        termin.setSelection(spinnerPositionTermin);
         SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy.");
         //rezervacija.setTermin(value.getVrijeme());
         Date date1 = new Date();
@@ -184,6 +185,21 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
                 curDate ="" + d + "." + m + "." + y + ".";
                 rezervacija.setDatum(curDate);
                 //String date = "" + cl.get(Calendar.DAY_OF_MONTH) + "." + cl.get(Calendar.MONTH) + "." + cl.get(Calendar.YEAR);
+
+                try {
+
+                    Date date1=new SimpleDateFormat("dd.MM.yyyy").parse(curDate);
+
+                    LoopTable(date1, categoriesTermin);
+
+
+
+                }
+                catch(Exception e) {
+                    //java.text.ParseException: Unparseable date: Geting error
+                    System.out.println("Excep"+e);
+                }
+
             }
         });
 
@@ -301,6 +317,54 @@ public class EditRezervacijaActivity extends AppCompatActivity implements Naviga
 
         }
         return true;
+    }
+
+    public void LoopTable(Date d, List<String> categoriesTermin){
+        List<String> ListaPostojecihTermina = new ArrayList<String>();
+
+        FirebaseDatabase.getInstance().getReference().child("Rezervacije")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Rezervacija a = snapshot.getValue(Rezervacija.class);
+                            String NDatum = a.getDatum();
+                            String NTermin = a.getTermin();
+                            try {
+                                SimpleDateFormat dateFormat= new SimpleDateFormat("dd.MM.yyyy");
+                                Date baza=dateFormat.parse(NDatum);
+                                if(baza.equals(d)){
+                                    ListaPostojecihTermina.add(NTermin);
+                                }
+
+                            }
+                            catch(Exception e) {
+                                //java.text.ParseException: Unparseable date: Geting error
+                                System.out.println("Excep"+e);
+                            }
+
+                        }
+                        List<String> union = new ArrayList(categoriesTermin);
+                        union.addAll(ListaPostojecihTermina);
+                        List<String> intersection = new ArrayList(categoriesTermin);
+                        intersection.retainAll(ListaPostojecihTermina);
+                        List<String> symmetricDifference = new ArrayList(union);
+                        symmetricDifference.removeAll(intersection);
+
+
+                        ArrayAdapter<String> dataAdapterTermin = new ArrayAdapter<String>(EditRezervacijaActivity.this,android.R.layout.simple_spinner_item,symmetricDifference);
+                        dataAdapterTermin.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        termin.setAdapter(dataAdapterTermin);
+
+
+                        dataAdapterTermin.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
     }
 
     @Override
